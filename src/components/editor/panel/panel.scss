@@ -1,0 +1,37 @@
+.wp-panel{
+    position: fixed;
+    top: 50px;
+    left: 120px;
+    .wp-panel-container{
+        position: relative;
+        .wp-panel-button{
+            position: absolute;
+            z-index: 1;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            border-radius: 50% 50%;
+            top: 0;
+            left: 0;
+
+            background-color: yellow;
+           &.wp-panel-opened{
+               background-color: transparent;
+               &:hover{
+                background-color: yellow;
+               }
+           }
+          
+        }
+        
+        .wp-panel-content{ 
+            z-index: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            &.wp-panel-opened{}
+            &.wp-panel-closed{}
+        }
+
+    }
+}
