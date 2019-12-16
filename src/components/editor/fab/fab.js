@@ -31,9 +31,9 @@ Fab.propTypes = {
 
 Fab.defaultProps = {
   className: [],
+  onCreate: () => null,
   onMouseDown: () => null,
-  onMouseMove: () => null,
-  onMouseUp: () => null
+  onMouseMove: () => null
 };
 
 export default Fab;

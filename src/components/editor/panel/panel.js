@@ -8,7 +8,8 @@ import "./panel.scss";
 export default ({
   children,
   top: topFromProps = 0,
-  left: leftFromProps = 0
+  left: leftFromProps = 0,
+  onCreate
 }) => {
   const [drag, setDrag] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
