@@ -1,0 +1,21 @@
+.wp-fab {
+  cursor: pointer;
+
+  background-color: silver;
+  box-shadow: 0 0 0 0.15em rgba(0, 0, 0, 0.12);
+
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  border-radius: 50% 50%;
+  text-align: center;
+
+  &:hover {
+    box-shadow: 0 0 0 0.15em rgba(0, 169, 247, 0.55);
+  }
+
+  .wp-fab-icon {
+    width: 100%;
+    line-height: 60px;
+  }
+}

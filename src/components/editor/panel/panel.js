@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import classnames from "classnames";
+import Fab from "../fab";
 import GLOBAL_LISTENER from "utils/global-listeners";
+import { PlusIcon } from "components/icons";
 import "./panel.scss";
 
 export default ({
@@ -41,9 +43,10 @@ export default ({
   return (
     <div className="wp-panel" style={{ top, left }}>
       <div className="wp-panel-container">
-        <div
+        <Fab
           className={classnames("wp-panel-button", {
-            "wp-panel-opened": opened
+            "wp-panel-opened": opened,
+            "wp-panel-closed": !opened
           })}
           onMouseDown={e => {
             e.stopPropagation();
@@ -63,7 +66,9 @@ export default ({
             }
             setDrag(false);
           }}
-        />
+        >
+          <PlusIcon />
+        </Fab>
         <div
           className={classnames("wp-panel-transition", {
             "wp-panel-opened": opened,
