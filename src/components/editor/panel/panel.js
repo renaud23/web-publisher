@@ -1,9 +1,16 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import classnames from "classnames";
 import Fab from "../fab";
 import GLOBAL_LISTENER from "utils/global-listeners";
 import { PlusIcon } from "components/icons";
 import "./panel.scss";
+
+const GLOBALS = {};
+const closeAllOther = id => {
+  Object.entries(GLOBALS).forEach(([key, cally]) => {
+    if (key !== id) cally();
+  });
+};
 
 export default ({
   children,
@@ -11,12 +18,14 @@ export default ({
   left: leftFromProps,
   className
 }) => {
+  const [id] = useState(`wp-panel-${new Date().getMilliseconds()}`);
   const [drag, setDrag] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
   const [opened, setOpened] = useState(false);
   const [top, setTop] = useState(topFromProps);
-  const [left, setLeft] = useState(leftFromProps);
+  const [left, setLeft] = useState(leftFromProps || 0);
   const [how, setHow] = useState(undefined);
+  const containerEl = useRef();
 
   const cally = useCallback(
     (eventName, e) => {
@@ -30,8 +39,14 @@ export default ({
     },
     [drag, how]
   );
+
+  const closeIt = useCallback(() => {
+    setOpened(false);
+  }, []);
+  GLOBALS[id] = closeIt;
+
+  useEffect(() => () => delete GLOBALS[id], [id]);
   useEffect(() => {
-    const id = `wp-panel-${new Date().getMilliseconds()}`;
     if (drag) {
       GLOBAL_LISTENER.register(id, cally);
       return () => {
@@ -39,7 +54,7 @@ export default ({
       };
     }
     GLOBAL_LISTENER.remove(id);
-  }, [drag, cally]);
+  }, [drag, cally, id]);
 
   return (
     <div
@@ -54,7 +69,10 @@ export default ({
           })}
           onMouseDown={e => {
             e.stopPropagation();
-            setHow({ left: left - e.clientX, top: top - e.clientY });
+            setHow({
+              left: left - e.clientX,
+              top: top - e.clientY
+            });
             setMouseDown(true);
           }}
           onMouseMove={e => {
@@ -65,6 +83,9 @@ export default ({
           onMouseUp={e => {
             e.stopPropagation();
             setMouseDown(false);
+            if (!opened) {
+              closeAllOther(id);
+            }
             if (!drag) {
               setOpened(!opened);
             }
@@ -78,6 +99,7 @@ export default ({
             "wp-panel-opened": opened,
             "wp-panel-closed": !opened
           })}
+          ref={containerEl}
         >
           {opened ? children : null}
         </div>
