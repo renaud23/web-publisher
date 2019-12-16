@@ -7,9 +7,9 @@ import "./panel.scss";
 
 export default ({
   children,
-  top: topFromProps = 0,
-  left: leftFromProps = 0,
-  onCreate
+  top: topFromProps,
+  left: leftFromProps,
+  className
 }) => {
   const [drag, setDrag] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
@@ -42,7 +42,10 @@ export default ({
   }, [drag, cally]);
 
   return (
-    <div className="wp-panel" style={{ top, left }}>
+    <div
+      className={classnames(className ? ["wp-panel", className] : "wp-panel")}
+      style={{ top, left }}
+    >
       <div className="wp-panel-container">
         <Fab
           className={classnames("wp-panel-button", {

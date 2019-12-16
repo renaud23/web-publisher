@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Panel } from "./editor";
 import GLOBAL_LISTENER from "utils/global-listeners";
 import { JsonEditor as Editor } from "jsoneditor-react";
+import Ajv from "ajv";
 import "./web-publisher.scss";
 import "jsoneditor-react/es/editor.min.css";
+
+const ajv = new Ajv({ allErrors: true, verbose: true });
 
 export default () => {
   const [init, setInit] = useState(false);
@@ -21,9 +24,9 @@ export default () => {
 
   return (
     <div className="web-publisher">
-      <Panel top={50} left={50}>
-        <div className="example">
-          <Editor value={{ hello: "hello" }} onChange={() => null} />
+      <Panel className="editor-panel" top={50} left={100}>
+        <div className="editor">
+          <Editor value={{ hello: "hello" }} ajv={ajv} onChange={() => null} />
         </div>
       </Panel>
       <p>
