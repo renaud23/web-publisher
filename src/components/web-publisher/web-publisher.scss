@@ -2,6 +2,7 @@
   .editor-panel {
     .wp-panel-button {
       left: -25px;
+      z-index: 5;
     }
 
     .editor {
@@ -25,11 +26,5 @@
     margin: 0;
     padding: 0;
     background-color: aquamarine;
-  }
-
-  .formulaire {
-    width: 1024px;
-    margin-left: auto;
-    margin-right: auto;
   }
 }
