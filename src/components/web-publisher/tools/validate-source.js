@@ -1,26 +1,42 @@
-import whiteList from "./white-list";
+import whiteList from './white-list';
+
+export const getChildren = (value) =>
+	Object.entries(value).reduce((a, [ k, m ]) => {
+		if (k === 'component') {
+			return [ ...a, ...validate(m) ];
+		}
+		if (k === 'components') {
+			return [ ...a, ...m.reduce((b, o) => [ ...b, ...validate(o) ], []) ];
+		}
+		return a;
+	}, []);
+
+const getWrongType = (model) => (name, value) =>
+	Object.entries(value).reduce((a, [ k, v ]) => {
+		if (!(k in model)) {
+			return [ ...a, `unknow properties ${k} for ${name}` ];
+		}
+
+		return a;
+	}, []);
 
 /** */
 const validateAttribute = (name, value = {}) => {
-  if (name in whiteList) {
-    if (typeof value !== "object") {
-      return [{ text: `${name} value is not object value.`, type: "error" }];
-    }
-    const model = whiteList[name];
-    const wrongType = Object.entries(value).reduce((a, [k, v]) => {
-      if (!(k in model)) {
-        return [...a, `unknow properties ${k} for ${name}`];
-      }
+	if (name in whiteList) {
+		if (typeof value !== 'object') {
+			return [ { text: `${name} value is not object value.`, type: 'error' } ];
+		}
+		const model = whiteList[name];
+		const wrongType = getWrongType(model)(name, value);
+		const children = getChildren(value);
 
-      return a;
-    }, []);
+		return [ ...wrongType, ...children ];
+	}
 
-    return [...wrongType];
-  }
-
-  return [];
+	return [];
 };
 
-const validate = (source = {}) => {};
+const validate = (source = {}) =>
+	Object.entries(source).reduce((a, [ k, v ]) => [ ...a, ...validateAttribute(k, v) ], []);
 
 export default validate;
