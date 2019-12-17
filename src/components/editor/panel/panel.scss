@@ -1,13 +1,11 @@
 .wp-panel {
   position: fixed;
-  top: 50px;
-  left: 120px;
+
   .wp-panel-container {
     position: relative;
     .wp-panel-button {
       position: absolute;
       z-index: 1;
-
       top: 0;
       left: 0;
 
@@ -28,8 +26,8 @@
     .wp-panel-content {
       z-index: 0;
       position: absolute;
-      top: 0;
-      left: 0;
+      // top: 0;
+      // left: 0;
       &.wp-panel-opened {
       }
       &.wp-panel-closed {
