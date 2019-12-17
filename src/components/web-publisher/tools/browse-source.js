@@ -1,11 +1,6 @@
 import React from "react";
-
+import whiteList from "./white-list";
 import * as componentsAPI from "components-api";
-
-const whiteList = {
-  Paragraphe: { contenu: "" },
-  Paragraphes: { paragraphe: [] }
-};
 
 /** */
 const Whity = ({ name, children, ...rest }) => {
@@ -35,8 +30,8 @@ const getChildren = value =>
   }, []);
 
 /** */
-const browserSource = (source = {}) =>
-  Object.entries(source).reduce((a, [name, value], i) => {
+const browserSource = (source = {}) => {
+  const components = Object.entries(source).reduce((a, [name, value], i) => {
     const children = [...a];
     if (name in whiteList) {
       return [
@@ -48,5 +43,7 @@ const browserSource = (source = {}) =>
     }
     return children;
   }, []);
+  return components;
+};
 
 export default browserSource;
