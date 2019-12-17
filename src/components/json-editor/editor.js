@@ -4,8 +4,8 @@ import { WPContext } from "../web-publisher";
 import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/theme-monokai";
 
-export default () => {
-  const { source } = useContext(WPContext);
+export default ({ onChange = () => null, onChangeAnnotation = () => null }) => {
+  const { editorContent } = useContext(WPContext);
 
   return (
     <AceEditor
@@ -13,13 +13,25 @@ export default () => {
       mode="json"
       theme="monokai"
       name="blah2"
-      onLoad={() => null}
-      onChange={() => null}
+      onLoad={editor => {
+        editor.focus();
+        editor.getSession().setUseWrapMode(true);
+        editor.getSession().on("changeAnnotation", () => {
+          onChangeAnnotation(
+            editor.getValue(),
+            editor.getSession().getAnnotations()
+          );
+        });
+        editor
+          .getSession()
+          .on("change", action => onChange(action, editor.getValue()));
+      }}
+      onChange={(...args) => {}}
       fontSize={14}
       showPrintMargin={true}
       showGutter={true}
       highlightActiveLine={true}
-      value={JSON.stringify(source, null, "\t")}
+      value={editorContent}
       // setOptions={{
       //   enableBasicAutocompletion: true,
       //   enableLiveAutocompletion: false,
