@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer } from "react";
+import classnames from "classnames";
 import reducer, { initial } from "./reducer";
 import { Panel } from "../commons";
 import JsonEditor from "../json-editor";
@@ -7,7 +8,8 @@ import validateSource from "./tools/validate-source";
 import * as actions from "./actions";
 import GLOBAL_LISTENER from "utils/global-listeners";
 import AppContext from "./context";
-import Errors from "./errors";
+import ConsoleErrors from "components/console-errors";
+
 import "./web-publisher.scss";
 
 const loadSource = () => fetch("/source.json").then(res => res.json());
@@ -44,15 +46,17 @@ export default () => {
               try {
                 const src = JSON.parse(content);
                 dispatch(actions.setSource(src));
-                dispatch(actions.setErrors(validateSource(src)));
-              } catch (e) {
-                console.log(e);
-              }
+                dispatch(actions.setWarnings(validateSource(src)));
+                dispatch(actions.setErrors());
+              } catch (e) {}
             }}
           />
         </Panel>
-        <div className="wp-content">
-          {errors.length ? <Errors /> : browserSource(source)}
+        <Panel className="wp-console-errors-panel" top={250} left={100}>
+          <ConsoleErrors />
+        </Panel>
+        <div className={classnames(["wp-content", "noselect"])}>
+          {errors.length ? <div>errors !</div> : browserSource(source)}
         </div>
       </div>
     </AppContext.Provider>

@@ -5,7 +5,8 @@ export const initial = {
   init: false,
   source: undefined,
   editorContent: undefined,
-  errors: []
+  errors: [],
+  warnings: []
 };
 
 const reduceInit = state => {
@@ -28,6 +29,11 @@ const reduceSetEditorContent = (state, { payload: { content } }) => ({
   editorContent: content
 });
 
+const reduceSetWarnings = (state, { payload: { warnings } }) => ({
+  ...state,
+  warnings
+});
+
 export default (state, action) => {
   const { type } = action;
   switch (type) {
@@ -42,6 +48,9 @@ export default (state, action) => {
     }
     case actions.SET_EDITOR_CONTENT: {
       return reduceSetEditorContent(state, action);
+    }
+    case actions.SET_WARNINGS: {
+      return reduceSetWarnings(state, action);
     }
 
     default:

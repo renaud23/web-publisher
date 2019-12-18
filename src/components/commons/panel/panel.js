@@ -19,6 +19,7 @@ export default ({
   className
 }) => {
   const [id] = useState(`wp-panel-${new Date().getMilliseconds()}`);
+  const [zIndex, setZindex] = useState(0);
   const [drag, setDrag] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
   const [opened, setOpened] = useState(false);
@@ -40,10 +41,10 @@ export default ({
     [drag, how]
   );
 
-  const closeIt = useCallback(() => {
-    setOpened(false);
+  const onBack = useCallback(() => {
+    setZindex(0);
   }, []);
-  GLOBALS[id] = closeIt;
+  GLOBALS[id] = onBack;
 
   useEffect(() => () => delete GLOBALS[id], [id]);
   useEffect(() => {
@@ -59,7 +60,11 @@ export default ({
   return (
     <div
       className={classnames(className ? ["wp-panel", className] : "wp-panel")}
-      style={{ top, left }}
+      style={{ top, left, zIndex }}
+      onMouseDown={() => {
+        setZindex(1);
+        closeAllOther(id);
+      }}
     >
       <div className="wp-panel-container">
         <Fab
@@ -74,6 +79,8 @@ export default ({
               top: top - e.clientY
             });
             setMouseDown(true);
+            setZindex(1);
+            closeAllOther(id);
           }}
           onMouseMove={e => {
             if (mouseDown) {
@@ -83,9 +90,6 @@ export default ({
           onMouseUp={e => {
             e.stopPropagation();
             setMouseDown(false);
-            if (!opened) {
-              closeAllOther(id);
-            }
             if (!drag) {
               setOpened(!opened);
             }

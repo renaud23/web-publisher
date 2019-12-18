@@ -1,0 +1,33 @@
+.wp-console-errors {
+  background-color: lightgray;
+  height: 250px;
+  width: 550px;
+
+  font-family: "Verdana", sans-serif;
+  font-size: 12px;
+  line-height: 26px;
+
+  .wp-no-error {
+    margin-left: 5px;
+  }
+
+  .wp-errors {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    .text {
+      padding-left: 18px;
+      color: darkred;
+    }
+    .row {
+      float: right;
+      min-width: 50px;
+      margin-left: 5px;
+    }
+    .column {
+      float: right;
+      min-width: 50px;
+    }
+  }
+}
