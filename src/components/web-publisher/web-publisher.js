@@ -4,6 +4,7 @@ import { Panel } from "../commons";
 import JsonEditor from "../json-editor";
 import browserSource from "./tools/browse-source";
 import validateSource from "./tools/validate-source";
+import stringHash from "string-hash";
 import * as actions from "./actions";
 import GLOBAL_LISTENER from "utils/global-listeners";
 import AppContext from "./context";
@@ -36,14 +37,12 @@ export default () => {
       <div className="web-publisher">
         <Panel className="editor-panel" top={50} left={100}>
           <JsonEditor
-            onChangeAnnotation={(content, annotations) => {
+            onChange={(content, annotations) => {
               if (!annotations.length) {
                 const src = JSON.parse(content);
                 dispatch(actions.setSource(src));
                 dispatch(actions.setEditorContent(content));
-                const err = validateSource(src);
-                console.log(err);
-                dispatch(actions.setErrors(err));
+                dispatch(actions.setErrors(validateSource(src)));
               } else {
                 dispatch(actions.setErrors(annotations));
                 dispatch(actions.setEditorContent(content));

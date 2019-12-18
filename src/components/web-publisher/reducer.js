@@ -5,7 +5,6 @@ export const initial = {
   init: false,
   source: undefined,
   editorContent: undefined,
-  worker: undefined,
   errors: []
 };
 
@@ -44,6 +43,7 @@ export default (state, action) => {
     case actions.SET_EDITOR_CONTENT: {
       return reduceSetEditorContent(state, action);
     }
+
     default:
       return state;
   }

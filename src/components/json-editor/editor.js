@@ -4,12 +4,11 @@ import { WPContext } from "../web-publisher";
 import "./editor.scss";
 import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/theme-monokai";
-
+let EDITOR;
 export default ({ onChange = () => null, onChangeAnnotation = () => null }) => {
   const { editorContent } = useContext(WPContext);
-
   return (
-    <div className="editor">
+    <div className="editor" id="editor">
       <AceEditor
         placeholder="Placeholder Text"
         mode="json"
@@ -18,29 +17,17 @@ export default ({ onChange = () => null, onChangeAnnotation = () => null }) => {
         onLoad={editor => {
           editor.focus();
           editor.getSession().setUseWrapMode(false);
-          editor.getSession().on("changeAnnotation", () => {
-            onChangeAnnotation(
-              editor.getValue(),
-              editor.getSession().getAnnotations()
-            );
-          });
-          editor
-            .getSession()
-            .on("change", action => onChange(action, editor.getValue()));
+          EDITOR = editor;
         }}
-        onChange={(...args) => {}}
         fontSize={14}
         showPrintMargin={true}
         showGutter={true}
         highlightActiveLine={true}
         value={editorContent}
-        // setOptions={{
-        //   enableBasicAutocompletion: true,
-        //   enableLiveAutocompletion: false,
-        //   enableSnippets: false,
-        //   showLineNumbers: true,
-        //   tabSize: 2
-        // }}
+        onChange={(...arg) => {
+          console.log(arg);
+          onChange(EDITOR.getValue(), EDITOR.getSession().getAnnotations());
+        }}
       />
     </div>
   );
