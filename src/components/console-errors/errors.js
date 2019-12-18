@@ -5,16 +5,21 @@ import "./errors.scss";
 
 const ConsoleErrors = () => {
   const { errors, warnings } = useContext(AppContext);
-  console.log(errors);
+
   return (
     <div className="wp-console-errors">
       {errors.length || warnings.length ? (
         <ul className="wp-errors">
-          {errors.map(err => (
-            <li className="wp-error">
+          {errors.map((err, i) => (
+            <li className="wp-error" key={`error${i}`}>
               <span className="text">{err.text}</span>
               <span className="row">{`row: ${err.row}`}</span>
               <span className="column">{`column: ${err.column}`}</span>
+            </li>
+          ))}
+          {warnings.map((warn, i) => (
+            <li className="wp-warnings" key={`warn${i}`}>
+              <span className="text">{warn}</span>
             </li>
           ))}
         </ul>

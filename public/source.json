@@ -1,5 +1,5 @@
 {
-  "titre": "Natus error sit voluptatem accusantium",
+  "titre": { "contenu": "Natus error sit voluptatem accusantium" },
   "Paragraphes": {
     "components": [
       {

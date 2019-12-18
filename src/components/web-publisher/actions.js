@@ -14,7 +14,7 @@ export const SET_ERRORS = "wp/set-errors";
 export const setErrors = errors => ({ type: SET_ERRORS, payload: { errors } });
 
 export const SET_WARNINGS = "wp/set-warnings";
-export const setWarnings = warnings => ({
+export const setWarnings = (warnings = []) => ({
   type: SET_WARNINGS,
   payload: { warnings }
 });

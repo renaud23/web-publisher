@@ -40,6 +40,7 @@ export default () => {
           <JsonEditor
             onError={err => {
               dispatch(actions.setErrors(err));
+              dispatch(actions.setWarnings());
             }}
             onChange={content => {
               dispatch(actions.setEditorContent(content));
