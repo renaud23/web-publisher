@@ -13,8 +13,11 @@ const Fab = ({ onMouseDown, onMouseMove, onMouseUp, className, children }) => {
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
       onMouseUp={onMouseUp}
+      draggable="false"
     >
-      <span className="wp-fab-icon">{children}</span>
+      <span onDrag={() => null} draggable="false" className="wp-fab-icon">
+        {children}
+      </span>
     </div>
   );
 };
