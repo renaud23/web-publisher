@@ -6,7 +6,7 @@ import Draggable from "../draggable";
 import "./panel.scss";
 
 const GLOBALS = {};
-const closeAllOther = id => {
+const callOtherCallbacks = id => {
   Object.entries(GLOBALS).forEach(([key, cally]) => {
     if (key !== id) cally();
   });
@@ -38,7 +38,7 @@ export default ({
       className={classnames(className ? ["wp-panel", className] : "wp-panel")}
     >
       <Draggable
-        zIndex={zIndex}
+        zIndex={zIndex + 1}
         top={topFromProps}
         left={leftFromProps}
         onDrag={(t, l) => {
@@ -62,16 +62,20 @@ export default ({
               setOpened(!opened);
             }
           }}
+          onMouseDown={() => {
+            callOtherCallbacks(id);
+            setZindex(2);
+          }}
         >
           <PlusIcon />
         </Fab>
       </Draggable>
       <div
         className="wp-panel-container"
-        style={{ top, left, zIndex: 0 }}
+        style={{ top, left, zIndex }}
         onMouseDown={() => {
-          setZindex(1);
-          closeAllOther(id);
+          callOtherCallbacks(id);
+          setZindex(2);
         }}
       >
         <div
