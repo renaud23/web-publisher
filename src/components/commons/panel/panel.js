@@ -21,6 +21,7 @@ export default ({
   const [id] = useState(`wp-panel-${new Date().getMilliseconds()}`);
   const [zIndex, setZindex] = useState(0);
   const [opened, setOpened] = useState(false);
+  const [size, setSize] = useState({ witdh: undefined, height: undefined });
   const [drag, setDrag] = useState(false);
   const [top, setTop] = useState(topFromProps || 0);
   const [left, setLeft] = useState(leftFromProps || 0);
@@ -32,6 +33,13 @@ export default ({
   GLOBALS[id] = onBack;
 
   useEffect(() => () => delete GLOBALS[id], [id]);
+  useEffect(() => {
+    if (containerEl.current && opened) {
+      const { width, height } = containerEl.current.getBoundingClientRect();
+      console.log(width, height);
+      setSize({ width, height });
+    }
+  }, [containerEl, setSize, opened]);
 
   return (
     <div
@@ -66,6 +74,10 @@ export default ({
             callOtherCallbacks(id);
             setZindex(2);
           }}
+          onEnter={e => {
+            e.stopPropagation();
+            setOpened(!opened);
+          }}
         >
           <PlusIcon />
         </Fab>
@@ -88,6 +100,17 @@ export default ({
           {opened ? children : null}
         </div>
       </div>
+      {opened ? (
+        <Draggable
+          top={top - 20 + size.height || 0}
+          left={left - 20 + size.width || 0}
+          minTop={top}
+          minLeft={left}
+          zIndex={zIndex}
+        >
+          <div className="wp-panel-resize"></div>
+        </Draggable>
+      ) : null}
     </div>
   );
 };

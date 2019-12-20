@@ -5,6 +5,8 @@ import "./draggable.scss";
 const Draggable = ({
   children,
   zIndex,
+  minTop,
+  minLeft,
   top: topFromProps,
   left: leftFromProps,
   onStartDrag,
@@ -20,8 +22,8 @@ const Draggable = ({
   const cally = useCallback(
     (eventName, e) => {
       if (eventName === "mousemove" && drag && how) {
-        setTop(e.clientY + how.top);
-        setLeft(e.clientX + how.left);
+        setTop(Math.max(e.clientY + how.top, minTop || 0));
+        setLeft(Math.max(e.clientX + how.left, minLeft || 0));
         onDrag(e.clientY + how.top, e.clientX + how.left);
       } else if (eventName === "mouseup") {
         e.stopPropagation();
@@ -29,8 +31,12 @@ const Draggable = ({
         setDown(false);
       }
     },
-    [drag, how, onDrag]
+    [drag, how, onDrag, minTop, minLeft]
   );
+  useEffect(() => {
+    setTop(topFromProps);
+    setLeft(leftFromProps);
+  }, [topFromProps, leftFromProps]);
   useEffect(() => {
     if (drag) {
       GLOBAL_LISTENER.register(id, cally);
@@ -43,6 +49,7 @@ const Draggable = ({
   return (
     <span
       className="wp-draggable"
+      tabIndex="-1"
       onMouseDown={e => {
         e.stopPropagation();
         setDown(true);

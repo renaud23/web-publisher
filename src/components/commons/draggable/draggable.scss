@@ -1,3 +1,6 @@
-.wp-draggable{
-    position: absolute;
+.wp-draggable {
+  position: absolute;
+  &:focus {
+    outline: none;
+  }
 }

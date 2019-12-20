@@ -3,7 +3,14 @@ import PropTypes from "prop-types";
 import classnames from "classnames";
 import "./fab.scss";
 
-const Fab = ({ onMouseDown, onMouseMove, onMouseUp, className, children }) => {
+const Fab = ({
+  onMouseDown,
+  onMouseMove,
+  onEnter,
+  onMouseUp,
+  className,
+  children
+}) => {
   const cls = Array.isArray(className)
     ? ["wp-fab", ...className]
     : ["wp-fab", className];
@@ -13,7 +20,13 @@ const Fab = ({ onMouseDown, onMouseMove, onMouseUp, className, children }) => {
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
       onMouseUp={onMouseUp}
+      tabIndex="0"
       draggable="false"
+      onKeyPress={e => {
+        if (e.key === "Enter") {
+          onEnter(e);
+        }
+      }}
     >
       <span onDrag={() => null} draggable="false" className="wp-fab-icon">
         {children}
@@ -29,14 +42,16 @@ Fab.propTypes = {
   ]),
   onMouseDown: PropTypes.func,
   onMouseMove: PropTypes.func,
-  onMouseUp: PropTypes.func
+  onMouseUp: PropTypes.func,
+  onEnter: PropTypes.func
 };
 
 Fab.defaultProps = {
   className: [],
   onCreate: () => null,
   onMouseDown: () => null,
-  onMouseMove: () => null
+  onMouseMove: () => null,
+  onEnter: () => null
 };
 
 export default Fab;
