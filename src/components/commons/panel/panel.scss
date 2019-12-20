@@ -1,27 +1,29 @@
 .wp-panel {
-  position: fixed;
+  // position: absolute;
 
-  .wp-panel-container {
-    position: relative;
-    .wp-panel-button {
-      position: absolute;
-      z-index: 1;
-      top: 0;
-      left: 0;
+  .wp-panel-button {
+    // position: absolute;
+    // z-index: 1;
+    // top: 0;
+    // left: 0;
 
-      &.wp-panel-opened {
-        opacity: 0;
+    &.wp-panel-opened {
+      opacity: 0;
+      transition: opacity 0.2s ease-in;
+      &:hover {
         transition: opacity 0.2s ease-in;
-        &:hover {
-          transition: opacity 0.2s ease-in;
-          opacity: 1;
-        }
-      }
-
-      &.wp-panel-closed {
         opacity: 1;
       }
     }
+
+    &.wp-panel-closed {
+      opacity: 1;
+    }
+  }
+
+  .wp-panel-container {
+    position: absolute;
+    
 
     .wp-panel-content {
       z-index: 0;
