@@ -1,11 +1,18 @@
 import React, { useContext } from "react";
+import PropTypes from "prop-types";
 import AceEditor from "react-ace";
 import { WPContext } from "../web-publisher";
 import "./editor.scss";
 import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/theme-monokai";
 let EDITOR;
-export default ({ onChange = () => null, onError = () => null }) => {
+
+const Editor = ({
+  onChange = () => null,
+  onError = () => null,
+  width,
+  height
+}) => {
   const { editorContent } = useContext(WPContext);
   return (
     <div className="editor" id="editor">
@@ -26,6 +33,8 @@ export default ({ onChange = () => null, onError = () => null }) => {
           });
         }}
         fontSize={14}
+        width={`${width}px`}
+        height={`${height}px`}
         showPrintMargin={true}
         showGutter={true}
         highlightActiveLine={true}
@@ -37,3 +46,19 @@ export default ({ onChange = () => null, onError = () => null }) => {
     </div>
   );
 };
+
+Editor.propTypes = {
+  onChange: PropTypes.func,
+  onError: PropTypes.func,
+  width: PropTypes.number,
+  height: PropTypes.number
+};
+
+Editor.defaultProps = {
+  onChange: () => null,
+  onError: () => null,
+  width: 640,
+  height: 480
+};
+
+export default Editor;

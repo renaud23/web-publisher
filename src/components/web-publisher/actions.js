@@ -18,3 +18,9 @@ export const setWarnings = (warnings = []) => ({
   type: SET_WARNINGS,
   payload: { warnings }
 });
+
+export const SET_EDITOR_SIZE = "wp/set-editor-size";
+export const setEditorSize = (width, height) => ({
+  type: SET_EDITOR_SIZE,
+  payload: { width, height }
+});

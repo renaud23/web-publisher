@@ -18,7 +18,7 @@ const stringifySource = source => JSON.stringify(source, null, "\t");
 
 export default () => {
   const [state, dispatch] = useReducer(reducer, initial);
-  const { init, source, errors } = state;
+  const { init, source, errors, editorSize } = state;
   useEffect(() => {
     if (!init) {
       dispatch(actions.init());
@@ -36,12 +36,21 @@ export default () => {
   return (
     <AppContext.Provider value={{ ...state, dispatch }}>
       <div className="web-publisher">
-        <Panel className="editor-panel" top={50} left={100}>
+        <Panel
+          className="editor-panel"
+          top={50}
+          left={100}
+          onResize={(w, h) => {
+            dispatch(actions.setEditorSize(w, h));
+          }}
+        >
           <JsonEditor
             onError={err => {
               dispatch(actions.setErrors(err));
               dispatch(actions.setWarnings());
             }}
+            width={editorSize.width}
+            height={editorSize.height}
             onChange={content => {
               dispatch(actions.setEditorContent(content));
               try {

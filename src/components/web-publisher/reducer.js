@@ -6,7 +6,8 @@ export const initial = {
   source: undefined,
   editorContent: undefined,
   errors: [],
-  warnings: []
+  warnings: [],
+  editorSize: { witdh: 250, height: 500 }
 };
 
 const reduceInit = state => {
@@ -34,6 +35,11 @@ const reduceSetWarnings = (state, { payload: { warnings } }) => ({
   warnings
 });
 
+const reduceSetEdirtorSize = (state, { payload: { width, height } }) => ({
+  ...state,
+  editorSize: { width, height }
+});
+
 export default (state, action) => {
   const { type } = action;
   switch (type) {
@@ -51,6 +57,9 @@ export default (state, action) => {
     }
     case actions.SET_WARNINGS: {
       return reduceSetWarnings(state, action);
+    }
+    case actions.SET_EDITOR_SIZE: {
+      return reduceSetEdirtorSize(state, action);
     }
 
     default:

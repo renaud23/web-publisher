@@ -66,7 +66,8 @@ const Draggable = ({
         setDown(false);
         setDrag(false);
       }}
-      onMouseMove={() => {
+      onMouseMove={e => {
+        e.stopPropagation();
         if (down && !drag) {
           onStartDrag(top, left);
           setDrag(true);

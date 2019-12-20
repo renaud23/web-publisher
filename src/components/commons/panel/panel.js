@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import PropTypes from "prop-types";
 import classnames from "classnames";
 import Fab from "../fab";
 import { PlusIcon } from "components/icons";
@@ -12,10 +13,11 @@ const callOtherCallbacks = id => {
   });
 };
 
-export default ({
+const Panel = ({
   children,
   top: topFromProps,
   left: leftFromProps,
+  onResize,
   className
 }) => {
   const [id] = useState(`wp-panel-${new Date().getMilliseconds()}`);
@@ -36,7 +38,6 @@ export default ({
   useEffect(() => {
     if (containerEl.current && opened) {
       const { width, height } = containerEl.current.getBoundingClientRect();
-      console.log(width, height);
       setSize({ width, height });
     }
   }, [containerEl, setSize, opened]);
@@ -83,22 +84,30 @@ export default ({
         </Fab>
       </Draggable>
       <div
-        className="wp-panel-container"
-        style={{ top, left, zIndex }}
-        onMouseDown={() => {
-          callOtherCallbacks(id);
-          setZindex(2);
-        }}
+        className={classnames("wp-panel-transition", {
+          "wp-panel-opened": opened,
+          "wp-panel-closed": !opened
+        })}
       >
-        <div
-          className={classnames("wp-panel-transition", {
-            "wp-panel-opened": opened,
-            "wp-panel-closed": !opened
-          })}
-          ref={containerEl}
-        >
-          {opened ? children : null}
-        </div>
+        {opened ? (
+          <div
+            className="wp-panel-container"
+            ref={containerEl}
+            style={{
+              top,
+              left,
+              zIndex,
+              width: size.width,
+              height: size.height
+            }}
+            onMouseDown={() => {
+              callOtherCallbacks(id);
+              setZindex(2);
+            }}
+          >
+            {children}
+          </div>
+        ) : null}
       </div>
       {opened ? (
         <Draggable
@@ -107,6 +116,10 @@ export default ({
           minTop={top}
           minLeft={left}
           zIndex={zIndex}
+          onStopDrag={(t, l) => {
+            setSize({ width: l - left, height: t - top });
+            onResize(l - left, t - top);
+          }}
         >
           <div className="wp-panel-resize"></div>
         </Draggable>
@@ -114,3 +127,13 @@ export default ({
     </div>
   );
 };
+
+Panel.propTypes = {
+  onResize: PropTypes.func
+};
+
+Panel.defaultProps = {
+  onResize: () => null
+};
+
+export default Panel;
