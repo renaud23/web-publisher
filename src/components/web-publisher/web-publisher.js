@@ -40,8 +40,9 @@ export default () => {
           className="editor-panel"
           top={50}
           left={100}
+          resize={true}
           onResize={(w, h) => {
-            dispatch(actions.setEditorSize(w, h));
+            dispatch(actions.setEditorSize(w, h - 25));
           }}
         >
           <JsonEditor

@@ -2,10 +2,11 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 import Fab from "../fab";
-import { PlusIcon } from "components/icons";
+import { PlusIcon, ExpandIcon } from "components/icons";
 import Draggable from "../draggable";
 import "./panel.scss";
 
+const RESIZER_WIDTH = 20;
 const GLOBALS = {};
 const callOtherCallbacks = id => {
   Object.entries(GLOBALS).forEach(([key, cally]) => {
@@ -15,6 +16,7 @@ const callOtherCallbacks = id => {
 
 const Panel = ({
   children,
+  resize,
   top: topFromProps,
   left: leftFromProps,
   onResize,
@@ -22,8 +24,13 @@ const Panel = ({
 }) => {
   const [id] = useState(`wp-panel-${new Date().getMilliseconds()}`);
   const [zIndex, setZindex] = useState(0);
+  const [expand, setExpand] = useState(false);
   const [opened, setOpened] = useState(false);
   const [size, setSize] = useState({ witdh: undefined, height: undefined });
+  const [tmpSize, setTmpSize] = useState({
+    witdh: undefined,
+    height: undefined
+  });
   const [drag, setDrag] = useState(false);
   const [top, setTop] = useState(topFromProps || 0);
   const [left, setLeft] = useState(leftFromProps || 0);
@@ -91,7 +98,7 @@ const Panel = ({
       >
         {opened ? (
           <div
-            className="wp-panel-container"
+            className={classnames("wp-panel-container", { expand })}
             ref={containerEl}
             style={{
               top,
@@ -109,19 +116,38 @@ const Panel = ({
           </div>
         ) : null}
       </div>
-      {opened ? (
+      {expand ? (
+        <div
+          className="wp-panel-resize-calque"
+          style={{
+            width: tmpSize.width,
+            height: tmpSize.height,
+            top,
+            left,
+            zIndex
+          }}
+        />
+      ) : null}
+      {opened && resize ? (
         <Draggable
-          top={top - 20 + size.height || 0}
-          left={left - 20 + size.width || 0}
+          top={top - RESIZER_WIDTH + size.height || 0}
+          left={left - RESIZER_WIDTH + size.width || 0}
           minTop={top}
           minLeft={left}
           zIndex={zIndex}
+          onStartDrag={() => setExpand(true)}
+          onDrag={(t, l) => {
+            setTmpSize({ width: l - left, height: t - top });
+          }}
           onStopDrag={(t, l) => {
             setSize({ width: l - left, height: t - top });
             onResize(l - left, t - top);
+            setExpand(false);
           }}
         >
-          <div className="wp-panel-resize"></div>
+          <Fab className="wp-panel-resize">
+            <ExpandIcon width={10} height={10} />
+          </Fab>
         </Draggable>
       ) : null}
     </div>
@@ -129,11 +155,19 @@ const Panel = ({
 };
 
 Panel.propTypes = {
-  onResize: PropTypes.func
+  onResize: PropTypes.func,
+  top: PropTypes.number,
+  left: PropTypes.number,
+  className: PropTypes.string,
+  resize: PropTypes.bool
 };
 
 Panel.defaultProps = {
-  onResize: () => null
+  onResize: () => null,
+  top: 0,
+  left: 0,
+  className: undefined,
+  resize: false
 };
 
 export default Panel;

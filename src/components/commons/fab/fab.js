@@ -4,6 +4,8 @@ import classnames from "classnames";
 import "./fab.scss";
 
 const Fab = ({
+  // width,
+  // height,
   onMouseDown,
   onMouseMove,
   onEnter,
