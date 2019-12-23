@@ -3,16 +3,16 @@ import classnames from "classnames";
 import reducer, { initial } from "./reducer";
 import { Panel } from "../commons";
 import JsonEditor from "../json-editor";
-import browserSource from "./tools/browse-source";
 import validateSource from "./tools/validate-source";
 import * as actions from "./actions";
 import GLOBAL_LISTENER from "utils/global-listeners";
 import AppContext from "./context";
 import ConsoleErrors from "components/console-errors";
+import ocherstrator from "ocherstration";
 
 import "./web-publisher.scss";
 
-const loadSource = () => fetch("/source.json").then(res => res.json());
+const loadSource = () => fetch("/questionnaire.json").then(res => res.json());
 
 const stringifySource = source => JSON.stringify(source, null, "\t");
 
@@ -42,7 +42,7 @@ export default () => {
           left={100}
           resize={true}
           onResize={(w, h) => {
-            dispatch(actions.setEditorSize(w, h - 25));
+            dispatch(actions.setEditorSize(w, h));
           }}
         >
           <JsonEditor
@@ -67,7 +67,7 @@ export default () => {
           <ConsoleErrors />
         </Panel>
         <div className={classnames(["wp-content", "noselect"])}>
-          {errors.length ? <div>errors !</div> : browserSource(source)}
+          {errors.length ? <div>errors !</div> : ocherstrator(source)}
         </div>
       </div>
     </AppContext.Provider>

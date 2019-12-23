@@ -1,5 +1,6 @@
 .web-publisher {
   .editor-panel {
+    font-family: monospace !important;
     .wp-panel-container {
       overflow-y: none;
     }
@@ -29,6 +30,9 @@
     background-color: ivory;
     margin-left: auto;
     margin-right: auto;
+
+    box-sizing: border-box;
+    font-family: "Gotham SSm A", "Gotham SSm B", sans-serif !important;
   }
 }
 
@@ -40,4 +44,8 @@
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Opera and Firefox */
+}
+
+* {
+  font-family: monospace;
 }

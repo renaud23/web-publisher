@@ -1,0 +1,29 @@
+.wp-json-editor-toolbar {
+  opacity: 0;
+  height: 12px;
+  z-index: 7;
+  width: 100%;
+  background-color: transparent;
+  position: absolute;
+
+  &:hover {
+    transition: height 0.3s ease-out;
+    opacity: 1;
+    height: 35px;
+    background-color: #9628b3;
+    box-shadow: 0px 0.1em 0.3em rgba(60, 60, 60, 0.6);
+  }
+
+  .wp-json-editor-toolbar-item {
+    display: inline-block;
+    margin-left: 35px;
+    margin-top: 7px;
+    height: 20px;
+    width: 20px;
+    background-color: silver;
+    &:hover {
+      background-color: silver;
+      border-radius: 50%;
+    }
+  }
+}

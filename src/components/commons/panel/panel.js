@@ -120,8 +120,8 @@ const Panel = ({
         <div
           className="wp-panel-resize-calque"
           style={{
-            width: tmpSize.width,
-            height: tmpSize.height,
+            width: tmpSize.width + RESIZER_WIDTH,
+            height: tmpSize.height + RESIZER_WIDTH,
             top,
             left,
             zIndex
@@ -140,8 +140,11 @@ const Panel = ({
             setTmpSize({ width: l - left, height: t - top });
           }}
           onStopDrag={(t, l) => {
-            setSize({ width: l - left, height: t - top });
-            onResize(l - left, t - top);
+            setSize({
+              width: l - left + RESIZER_WIDTH,
+              height: t - top + RESIZER_WIDTH
+            });
+            onResize(l - left + RESIZER_WIDTH, t - top + RESIZER_WIDTH);
             setExpand(false);
           }}
         >

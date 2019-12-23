@@ -2,9 +2,11 @@ import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import AceEditor from "react-ace";
 import { WPContext } from "../web-publisher";
+import Toolbar from "./toolbar";
 import "./editor.scss";
 import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/theme-monokai";
+import "ace-builds/src-noconflict/theme-github";
 let EDITOR;
 
 const Editor = ({
@@ -16,6 +18,7 @@ const Editor = ({
   const { editorContent } = useContext(WPContext);
   return (
     <div className="editor" id="editor">
+      <Toolbar />
       <AceEditor
         placeholder="Placeholder Text"
         mode="json"
@@ -42,6 +45,7 @@ const Editor = ({
         onChange={() => {
           onChange(EDITOR.getValue());
         }}
+        setOptions={{ fontFamily: "monospace" }}
       />
     </div>
   );
