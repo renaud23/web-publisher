@@ -23,7 +23,7 @@ const Editor = ({
         placeholder="Placeholder Text"
         mode="json"
         theme="monokai"
-        name="blah2"
+        name="web-publisher"
         onLoad={editor => {
           editor.focus();
           editor.getSession().setUseWrapMode(false);

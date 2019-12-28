@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.26",
+    "@fortawesome/free-solid-svg-icons": "^5.12.0",
+    "@fortawesome/react-fontawesome": "^0.1.8",
     "@inseefr/lunatic": "^1.1.3",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -13,7 +16,6 @@
     "react": "^16.12.0",
     "react-ace": "^8.0.0",
     "react-dom": "^16.12.0",
-    "react-fontawesome": "^1.7.1",
     "react-scripts": "3.3.0",
     "string-hash": "^1.1.3"
   },
