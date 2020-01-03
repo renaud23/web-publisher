@@ -3,39 +3,42 @@ import PropTypes from "prop-types";
 import classnames from "classnames";
 import "./fab.scss";
 
-const Fab = ({
-  // width,
-  // height,
-  onMouseDown,
-  onMouseMove,
-  onEnter,
-  onMouseUp,
-  className,
-  children
-}) => {
-  const cls = Array.isArray(className)
-    ? ["wp-fab", ...className]
-    : ["wp-fab", className];
-  return (
-    <div
-      className={classnames(...cls)}
-      onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
-      tabIndex="0"
-      draggable="false"
-      onKeyPress={e => {
-        if (e.key === "Enter") {
-          onEnter(e);
-        }
-      }}
-    >
-      <span onDrag={() => null} draggable="false" className="wp-fab-icon">
-        {children}
-      </span>
-    </div>
-  );
-};
+const Fab = React.memo(
+  ({
+    width,
+    height,
+    onMouseDown,
+    onMouseMove,
+    onEnter,
+    onMouseUp,
+    className,
+    children
+  }) => {
+    const cls = Array.isArray(className)
+      ? ["wp-fab", ...className]
+      : ["wp-fab", className];
+    return (
+      <div
+        className={classnames(...cls)}
+        style={{ width, height }}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}
+        tabIndex="0"
+        draggable="false"
+        onKeyPress={e => {
+          if (e.key === "Enter") {
+            onEnter(e);
+          }
+        }}
+      >
+        <span onDrag={() => null} draggable="false" className="wp-fab-icon">
+          {children}
+        </span>
+      </div>
+    );
+  }
+);
 
 Fab.propTypes = {
   className: PropTypes.oneOfType([

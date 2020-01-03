@@ -15,148 +15,150 @@ const callOtherCallbacks = id => {
   });
 };
 
-const Panel = ({
-  children,
-  resize,
-  top: topFromProps,
-  left: leftFromProps,
-  onResize,
-  className
-}) => {
-  const [id] = useState(`wp-panel-${new Date().getMilliseconds()}`);
-  const [zIndex, setZindex] = useState(0);
-  const [expand, setExpand] = useState(false);
-  const [opened, setOpened] = useState(false);
-  const [size, setSize] = useState({ witdh: undefined, height: undefined });
-  const [tmpSize, setTmpSize] = useState({
-    witdh: undefined,
-    height: undefined
-  });
-  const [drag, setDrag] = useState(false);
-  const [top, setTop] = useState(topFromProps || 0);
-  const [left, setLeft] = useState(leftFromProps || 0);
-  const containerEl = useRef();
+const Panel = React.memo(
+  ({
+    children,
+    resize,
+    top: topFromProps,
+    left: leftFromProps,
+    onResize,
+    className
+  }) => {
+    const [id] = useState(`wp-panel-${new Date().getMilliseconds()}`);
+    const [zIndex, setZindex] = useState(0);
+    const [expand, setExpand] = useState(false);
+    const [opened, setOpened] = useState(false);
+    const [size, setSize] = useState({ witdh: undefined, height: undefined });
+    const [tmpSize, setTmpSize] = useState({
+      witdh: 0,
+      height: 0
+    });
+    const [drag, setDrag] = useState(false);
+    const [top, setTop] = useState(topFromProps || 0);
+    const [left, setLeft] = useState(leftFromProps || 0);
+    const containerEl = useRef();
 
-  const onBack = useCallback(() => {
-    setZindex(0);
-  }, []);
-  GLOBALS[id] = onBack;
+    const onBack = useCallback(() => {
+      setZindex(0);
+    }, []);
+    GLOBALS[id] = onBack;
 
-  useEffect(() => () => delete GLOBALS[id], [id]);
-  useEffect(() => {
-    if (containerEl.current && opened) {
-      const { width, height } = containerEl.current.getBoundingClientRect();
-      setSize({ width, height });
-    }
-  }, [containerEl, setSize, opened]);
+    useEffect(() => () => delete GLOBALS[id], [id]);
+    useEffect(() => {
+      if (containerEl.current && opened) {
+        const { width, height } = containerEl.current.getBoundingClientRect();
+        setSize({ width, height });
+      }
+    }, [containerEl, setSize, opened]);
 
-  return (
-    <div
-      className={classnames(className ? ["wp-panel", className] : "wp-panel")}
-    >
-      <Draggable
-        zIndex={zIndex + 1}
-        top={topFromProps}
-        left={leftFromProps}
-        onDrag={(t, l) => {
-          setTop(t);
-          setLeft(l);
-        }}
-        onStartDrag={() => {
-          setDrag(true);
-        }}
-        onStopDrag={() => {
-          setDrag(false);
-        }}
+    return (
+      <div
+        className={classnames(className ? ["wp-panel", className] : "wp-panel")}
       >
-        <Fab
-          className={classnames("wp-panel-button", {
-            "wp-panel-opened": opened,
-            "wp-panel-closed": !opened
-          })}
-          onMouseUp={e => {
-            if (!drag) {
-              setOpened(!opened);
-            }
+        <Draggable
+          zIndex={zIndex + 1}
+          top={topFromProps}
+          left={leftFromProps}
+          onDrag={(t, l) => {
+            setTop(t);
+            setLeft(l);
           }}
-          onMouseDown={() => {
-            callOtherCallbacks(id);
-            setZindex(2);
+          onStartDrag={() => {
+            setDrag(true);
           }}
-          onEnter={e => {
-            e.stopPropagation();
-            setOpened(!opened);
+          onStopDrag={() => {
+            setDrag(false);
           }}
         >
-          <PlusIcon />
-        </Fab>
-      </Draggable>
-      <div
-        className={classnames("wp-panel-transition", {
-          "wp-panel-opened": opened,
-          "wp-panel-closed": !opened
-        })}
-      >
-        {opened ? (
-          <div
-            className={classnames("wp-panel-container", { expand })}
-            ref={containerEl}
-            style={{
-              top,
-              left,
-              zIndex,
-              width: size.width,
-              height: size.height
+          <Fab
+            className={classnames("wp-panel-button", {
+              "wp-panel-opened": opened,
+              "wp-panel-closed": !opened
+            })}
+            onMouseUp={e => {
+              if (!drag) {
+                setOpened(!opened);
+              }
             }}
             onMouseDown={() => {
               callOtherCallbacks(id);
               setZindex(2);
             }}
+            onEnter={e => {
+              e.stopPropagation();
+              setOpened(!opened);
+            }}
           >
-            {children}
-          </div>
-        ) : null}
-      </div>
-      {expand ? (
-        <div
-          className="wp-panel-resize-calque"
-          style={{
-            width: tmpSize.width + RESIZER_EFF,
-            height: tmpSize.height + RESIZER_EFF,
-            top,
-            left,
-            zIndex
-          }}
-        />
-      ) : null}
-      {opened && resize ? (
-        <Draggable
-          top={top - RESIZER_EFF + size.height || 0}
-          left={left - RESIZER_EFF + size.width || 0}
-          minTop={top}
-          minLeft={left}
-          zIndex={zIndex}
-          onStartDrag={() => setExpand(true)}
-          onDrag={(t, l) => {
-            setTmpSize({ width: l - left, height: t - top });
-          }}
-          onStopDrag={(t, l) => {
-            setSize({
-              width: l - left + RESIZER_EFF,
-              height: t - top + RESIZER_EFF
-            });
-            onResize(l - left + RESIZER_EFF, t - top + RESIZER_EFF);
-            setExpand(false);
-          }}
-        >
-          <Fab className="wp-panel-resize">
-            <ExpandIcon width={10} height={10} />
+            <PlusIcon />
           </Fab>
         </Draggable>
-      ) : null}
-    </div>
-  );
-};
+        <div
+          className={classnames("wp-panel-transition", {
+            "wp-panel-opened": opened,
+            "wp-panel-closed": !opened
+          })}
+        >
+          {opened ? (
+            <div
+              className={classnames("wp-panel-container", { expand })}
+              ref={containerEl}
+              style={{
+                top,
+                left,
+                zIndex,
+                width: size.width,
+                height: size.height
+              }}
+              onMouseDown={() => {
+                callOtherCallbacks(id);
+                setZindex(2);
+              }}
+            >
+              {children}
+            </div>
+          ) : null}
+        </div>
+        {expand ? (
+          <div
+            className="wp-panel-resize-calque"
+            style={{
+              width: tmpSize.width + RESIZER_EFF || 0,
+              height: tmpSize.height + RESIZER_EFF || 0,
+              top,
+              left,
+              zIndex
+            }}
+          />
+        ) : null}
+        {opened && resize ? (
+          <Draggable
+            top={top - RESIZER_EFF + size.height || 0}
+            left={left - RESIZER_EFF + size.width || 0}
+            minTop={top}
+            minLeft={left}
+            zIndex={zIndex}
+            onStartDrag={() => setExpand(true)}
+            onDrag={(t, l) => {
+              setTmpSize({ width: l - left, height: t - top });
+            }}
+            onStopDrag={(t, l) => {
+              setSize({
+                width: l - left + RESIZER_EFF,
+                height: t - top + RESIZER_EFF
+              });
+              onResize(l - left + RESIZER_EFF, t - top + RESIZER_EFF);
+              setExpand(false);
+            }}
+          >
+            <Fab className="wp-panel-resize">
+              <ExpandIcon width={10} height={10} />
+            </Fab>
+          </Draggable>
+        ) : null}
+      </div>
+    );
+  }
+);
 
 Panel.propTypes = {
   onResize: PropTypes.func,

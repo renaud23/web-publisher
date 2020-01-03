@@ -3,8 +3,10 @@ import * as actions from "./actions";
 
 export const initial = {
   init: false,
-  source: undefined,
-  editorContent: undefined,
+  source: undefined, // JSON for Lunatic
+  editorContent: undefined, // String fro JSON editor
+  contentHash: undefined,
+  sourceHash: undefined,
   errors: [],
   warnings: [],
   editorSize: { witdh: 250, height: 500 }
@@ -15,9 +17,10 @@ const reduceInit = state => {
   return { ...state, init: true };
 };
 
-const reduceSetSource = (state, { payload: { source } }) => ({
+const reduceSetSource = (state, { payload: { source, hash } }) => ({
   ...state,
-  source
+  source,
+  sourceHash: hash
 });
 
 const reduceSetErrors = (state, { payload: { errors = [] } }) => ({
@@ -25,10 +28,13 @@ const reduceSetErrors = (state, { payload: { errors = [] } }) => ({
   errors
 });
 
-const reduceSetEditorContent = (state, { payload: { content } }) => ({
-  ...state,
-  editorContent: content
-});
+const reduceSetEditorContent = (state, { payload: { content, hash } }) => {
+  return {
+    ...state,
+    editorContent: content,
+    contentHash: hash
+  };
+};
 
 const reduceSetWarnings = (state, { payload: { warnings } }) => ({
   ...state,

@@ -3,7 +3,7 @@ import classnames from "classnames";
 import reducer, { initial } from "./reducer";
 import { Panel } from "../commons";
 import JsonEditor from "../json-editor";
-import validateSource from "./tools/validate-source";
+import hash from "string-hash";
 import * as actions from "./actions";
 import GLOBAL_LISTENER from "utils/global-listeners";
 import AppContext from "./context";
@@ -23,8 +23,9 @@ export default () => {
     if (!init) {
       dispatch(actions.init());
       loadSource().then(src => {
-        dispatch(actions.setSource(src));
-        dispatch(actions.setEditorContent(stringifySource(src)));
+        const hashed = hash(src);
+        dispatch(actions.setSource(src, hashed));
+        dispatch(actions.setEditorContent(stringifySource(src), hashed));
       });
       return () => {
         if (init) {
@@ -53,11 +54,8 @@ export default () => {
             width={editorSize.width}
             height={editorSize.height}
             onChange={content => {
-              dispatch(actions.setEditorContent(content));
+              dispatch(actions.setEditorContent(content, hash(content)));
               try {
-                const src = JSON.parse(content);
-                dispatch(actions.setSource(src));
-                dispatch(actions.setWarnings(validateSource(src)));
                 dispatch(actions.setErrors());
               } catch (e) {}
             }}

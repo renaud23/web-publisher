@@ -2,12 +2,15 @@ export const INIT_WP = "wp/init";
 export const init = args => ({ type: INIT_WP });
 
 export const SET_SOURCE = "wp/set-source";
-export const setSource = source => ({ type: SET_SOURCE, payload: { source } });
+export const setSource = (source, hash) => ({
+  type: SET_SOURCE,
+  payload: { source, hash }
+});
 
 export const SET_EDITOR_CONTENT = "wp/set-editor-content";
-export const setEditorContent = content => ({
+export const setEditorContent = (content, hash) => ({
   type: SET_EDITOR_CONTENT,
-  payload: { content }
+  payload: { content, hash }
 });
 
 export const SET_ERRORS = "wp/set-errors";

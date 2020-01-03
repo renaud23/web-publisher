@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import AceEditor from "react-ace";
 import { WPContext } from "../web-publisher";
 import Toolbar from "./toolbar";
+import * as actions from "components/web-publisher/actions";
 import "./editor.scss";
 import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/theme-monokai";
@@ -15,10 +16,18 @@ const Editor = ({
   width,
   height
 }) => {
-  const { editorContent } = useContext(WPContext);
+  const { editorContent, sourceHash, contentHash, dispatch } = useContext(
+    WPContext
+  );
   return (
     <div className="editor" id="editor">
-      <Toolbar />
+      <Toolbar
+        refreshable={sourceHash !== contentHash}
+        refresh={() => {
+          console.log("coucou", editorContent);
+          dispatch(actions.setSource(JSON.parse(editorContent), contentHash));
+        }}
+      />
       <AceEditor
         placeholder="Placeholder Text"
         mode="json"
