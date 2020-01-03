@@ -7,6 +7,7 @@ import Draggable from "../draggable";
 import "./panel.scss";
 
 const RESIZER_WIDTH = 20;
+const RESIZER_EFF = Math.trunc(RESIZER_WIDTH * 0.5);
 const GLOBALS = {};
 const callOtherCallbacks = id => {
   Object.entries(GLOBALS).forEach(([key, cally]) => {
@@ -120,8 +121,8 @@ const Panel = ({
         <div
           className="wp-panel-resize-calque"
           style={{
-            width: tmpSize.width + RESIZER_WIDTH,
-            height: tmpSize.height + RESIZER_WIDTH,
+            width: tmpSize.width + RESIZER_EFF,
+            height: tmpSize.height + RESIZER_EFF,
             top,
             left,
             zIndex
@@ -130,8 +131,8 @@ const Panel = ({
       ) : null}
       {opened && resize ? (
         <Draggable
-          top={top - RESIZER_WIDTH + size.height || 0}
-          left={left - RESIZER_WIDTH + size.width || 0}
+          top={top - RESIZER_EFF + size.height || 0}
+          left={left - RESIZER_EFF + size.width || 0}
           minTop={top}
           minLeft={left}
           zIndex={zIndex}
@@ -141,10 +142,10 @@ const Panel = ({
           }}
           onStopDrag={(t, l) => {
             setSize({
-              width: l - left + RESIZER_WIDTH,
-              height: t - top + RESIZER_WIDTH
+              width: l - left + RESIZER_EFF,
+              height: t - top + RESIZER_EFF
             });
-            onResize(l - left + RESIZER_WIDTH, t - top + RESIZER_WIDTH);
+            onResize(l - left + RESIZER_EFF, t - top + RESIZER_EFF);
             setExpand(false);
           }}
         >
